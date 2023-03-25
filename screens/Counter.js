@@ -6,7 +6,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import { Line, G } from 'react-native-svg'
 import Speedometer, {Background, Arc, Needle, Progress, Marks, Indicator,DangerPath
 } from 'react-native-cool-speedometer';
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage, button } from 'react-native-material-cards'
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage, button, Button } from 'react-native-material-cards'
 import exerciseImg from '../image/exercise2.png';
 import ProgressBar from 'react-native-progress/Bar';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -23,6 +23,19 @@ export default function Counter(props) {
 
  const [currentScreen, setCurrentScreen] = useState('counter');
 
+ const myCustomerShare = async() =>{
+  const shareOptions = {
+    message: "https://dev.stedi.me/timer.html#" + token.current
+  }
+  try{
+    const shareResponse = await Share.share(shareOptions)
+    console.log(shareResponse);
+    }
+    catch(error){
+console.log('Error', error)
+    }
+  }
+ 
  useEffect(()=>{//gets username and token from storage
   const getUserName = async ()=>{
     userName.current= await AsyncStorage.getItem('userName');
@@ -190,7 +203,7 @@ setCounter(3);
 
 const shareProgress = async() =>{
   const shareOptions = {
-    message: 'This is a test'
+    message: "https://dev.stedi.me/timer.html#" + token.current
   }
   try{
     const shareResponse = await Share.share(shareOptions)
@@ -320,13 +333,20 @@ elevation: 4}}>
    <FontAwesome5  name='redo' color='red' size={20} style={{ alignSelf: 'flex-end', marginTop:30, paddingRight:15, position: 'absolute'}} />
    <Image source={exerciseImg}  style={styles.image} ></Image>
 <CardContent>
+  
   <Text style={styles.text}>Step Quickly</Text>
   <TouchableOpacity
      onPress={ subscription ? _unsubscribe : _subscribe}
-      style={styles.button}
-    >
+      style={styles.button}>
       <Text>{subscription ? 'Stop' : 'GO'}</Text>
      </TouchableOpacity>
+     
+     <TouchableOpacity 
+        onPress={myCustomerShare} 
+        style={styles.button}>
+        <Text>{'ADD SPOTTER'}</Text>
+      </TouchableOpacity>
+
 
      </CardContent>
      <ProgressBar progress={(stepCount * 0.50/30) + (completionCount * 0.50)} width={300} height={25} color={'#A0CE4E'} style={styles.bar}/>
@@ -363,7 +383,6 @@ elevation: 4}}>
     <ProgressBar progress={(stepCount * 0.50/30) + (completionCount * 0.50)} width={300} height={25} color={'#A0CE4E'} style={styles.bar2}/>
     </CardContent>
 </Card>
-
      </View>
 
   );
@@ -416,7 +435,6 @@ subtitle={messageOutcome()}
 
 
 }
-
 function round(n) {
   if (!n) {
     return 0;
@@ -433,7 +451,7 @@ const styles = StyleSheet.create({
 
   button: {
     marginTop: 15,
-    marginBottom: 20,
+    marginBottom: 0,
     width: 170,
     height: 38,
     justifyContent: 'center',
@@ -473,7 +491,7 @@ marginBottom: 2
       padding: 10,
       borderRadius: 100,
       backgroundColor: '#A0CE4E',
-      marginLeft:50
+      marginLeft:90
     },
 
 });
